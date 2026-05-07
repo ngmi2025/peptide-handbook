@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { SiteHeader, DisclaimerStrip } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
 import { ArrowRight } from '@/components/Icons';
+import { JsonLd } from '@/components/JsonLd';
 import { COMPARISONS } from '@/lib/comparisons';
+import { jsonLdGraph, collectionPageSchema, breadcrumbSchema, SITE_URL } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Peptide comparisons',
@@ -53,6 +55,20 @@ export default function CompareIndex() {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          collectionPageSchema({
+            url: `${SITE_URL}/compare`,
+            name: 'Peptide comparisons',
+            description: 'Head-to-head reviews of the most-discussed peptide pairings.',
+            items: COMPARISONS.map((c) => ({ name: c.title, url: `${SITE_URL}/compare/${c.slug}` })),
+          }),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Comparisons', url: '/compare' },
+          ]),
+        )}
+      />
     </>
   );
 }

@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { SiteHeader, DisclaimerStrip } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
 import { GUIDES, getGuide } from '@/lib/guides';
+import { JsonLd } from '@/components/JsonLd';
+import { jsonLdGraph, guideArticleSchema, breadcrumbSchema } from '@/lib/schema';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -84,6 +86,16 @@ export default async function GuidePage({ params }: Props) {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          guideArticleSchema(g),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Guides', url: '/guides' },
+            { name: g.title, url: `/guides/${g.slug}` },
+          ]),
+        )}
+      />
     </>
   );
 }

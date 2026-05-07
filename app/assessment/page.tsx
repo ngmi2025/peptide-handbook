@@ -2,6 +2,13 @@ import type { Metadata } from 'next';
 import { SiteHeader, DisclaimerStrip } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
 import { AssessmentQuiz } from '@/components/AssessmentQuiz';
+import { JsonLd } from '@/components/JsonLd';
+import {
+  jsonLdGraph,
+  assessmentHowToSchema,
+  assessmentWebApplicationSchema,
+  breadcrumbSchema,
+} from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Find the right peptide for your goal',
@@ -38,6 +45,16 @@ export default async function AssessmentPage({ searchParams }: Props) {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          assessmentHowToSchema(),
+          assessmentWebApplicationSchema(),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Assessment', url: '/assessment' },
+          ]),
+        )}
+      />
     </>
   );
 }

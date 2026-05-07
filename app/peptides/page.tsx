@@ -4,7 +4,9 @@ import { SiteHeader, DisclaimerStrip } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
 import { ArrowRight } from '@/components/Icons';
 import { StarRating } from '@/components/StarRating';
+import { JsonLd } from '@/components/JsonLd';
 import { PEPTIDES } from '@/lib/peptides';
+import { jsonLdGraph, collectionPageSchema, breadcrumbSchema, SITE_URL } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Peptide directory — every compound we\'ve reviewed',
@@ -59,6 +61,20 @@ export default function PeptidesIndex() {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          collectionPageSchema({
+            url: `${SITE_URL}/peptides`,
+            name: 'Peptide directory',
+            description: 'Every peptide reviewed by Peptide Handbook, ranked by evidence quality.',
+            items: sorted.map((p) => ({ name: p.name, url: `${SITE_URL}/peptides/${p.slug}` })),
+          }),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Peptides', url: '/peptides' },
+          ]),
+        )}
+      />
     </>
   );
 }

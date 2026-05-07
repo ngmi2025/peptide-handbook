@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import { SiteHeader, DisclaimerStrip } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
 import { ArticleCard, CoverChart, CoverBars, CoverMolecule, CoverComparison } from '@/components/ArticleCard';
+import { JsonLd } from '@/components/JsonLd';
 import { GUIDES } from '@/lib/guides';
+import { jsonLdGraph, collectionPageSchema, breadcrumbSchema, SITE_URL } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Guides — long-form peptide research',
@@ -56,6 +58,20 @@ export default function GuidesIndex() {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          collectionPageSchema({
+            url: `${SITE_URL}/guides`,
+            name: 'Long-form peptide guides',
+            description: 'Evidence-led articles on UK peptide use, legal status, and compound rankings.',
+            items: GUIDES.map((g) => ({ name: g.title, url: `${SITE_URL}/guides/${g.slug}` })),
+          }),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Guides', url: '/guides' },
+          ]),
+        )}
+      />
     </>
   );
 }

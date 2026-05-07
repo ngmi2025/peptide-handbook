@@ -5,8 +5,10 @@ import { SiteHeader, DisclaimerStrip } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
 import { ArrowRight } from '@/components/Icons';
 import { RatingCard } from '@/components/RatingCard';
+import { JsonLd } from '@/components/JsonLd';
 import { GOALS, getGoal } from '@/lib/goals';
 import { getPeptidesByGoal } from '@/lib/peptides';
+import { jsonLdGraph, collectionPageSchema, breadcrumbSchema, SITE_URL } from '@/lib/schema';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -108,6 +110,21 @@ export default async function GoalPage({ params }: Props) {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          collectionPageSchema({
+            url: `${SITE_URL}/goals/${g.slug}`,
+            name: `Best peptides for ${g.label.toLowerCase()}`,
+            description: g.longDesc,
+            items: peptides.map((p) => ({ name: p.name, url: `${SITE_URL}/peptides/${p.slug}` })),
+          }),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Goals', url: '/goals' },
+            { name: g.label, url: `/goals/${g.slug}` },
+          ]),
+        )}
+      />
     </>
   );
 }

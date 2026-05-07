@@ -3,8 +3,10 @@ import Link from 'next/link';
 import { SiteHeader, DisclaimerStrip } from '@/components/Header';
 import { SiteFooter } from '@/components/Footer';
 import { GoalGrid, type Goal } from '@/components/GoalGrid';
+import { JsonLd } from '@/components/JsonLd';
 import { GOALS } from '@/lib/goals';
 import { countByGoal, topByGoal } from '@/lib/peptides';
+import { jsonLdGraph, collectionPageSchema, breadcrumbSchema, SITE_URL } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Browse peptides by goal',
@@ -51,6 +53,20 @@ export default function GoalsIndex() {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          collectionPageSchema({
+            url: `${SITE_URL}/goals`,
+            name: 'Browse peptides by goal',
+            description: 'Six goal categories: fat loss, muscle growth, recovery, longevity, sleep, cognitive.',
+            items: GOALS.map((g) => ({ name: g.label, url: `${SITE_URL}/goals/${g.slug}` })),
+          }),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Goals', url: '/goals' },
+          ]),
+        )}
+      />
     </>
   );
 }

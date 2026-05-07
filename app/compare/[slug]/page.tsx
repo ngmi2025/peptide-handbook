@@ -9,6 +9,8 @@ import { PageNav, type NavItem } from '@/components/PageNav';
 import { ArrowRight } from '@/components/Icons';
 import { COMPARISONS, getComparison } from '@/lib/comparisons';
 import { getPeptide } from '@/lib/peptides';
+import { JsonLd } from '@/components/JsonLd';
+import { jsonLdGraph, comparisonArticleSchema, breadcrumbSchema } from '@/lib/schema';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -200,6 +202,16 @@ export default async function ComparisonPage({ params }: Props) {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          comparisonArticleSchema(c),
+          breadcrumbSchema([
+            { name: 'Handbook', url: '/' },
+            { name: 'Comparisons', url: '/compare' },
+            { name: c.title, url: `/compare/${c.slug}` },
+          ]),
+        )}
+      />
     </>
   );
 }

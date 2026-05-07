@@ -8,8 +8,11 @@ import { RatingCard } from '@/components/RatingCard';
 import { ArticleCard, CoverChart, CoverBars, CoverComparison, CoverMolecule } from '@/components/ArticleCard';
 import { HeroVisualAmbient, HeroBackground } from '@/components/HeroVisual';
 import { PeptideLogo } from '@/components/Logo';
+import { JsonLd } from '@/components/JsonLd';
 import { GOALS } from '@/lib/goals';
 import { countByGoal, topByGoal, PEPTIDES } from '@/lib/peptides';
+import { HOMEPAGE_FAQ } from '@/lib/faq';
+import { jsonLdGraph, faqSchema, breadcrumbSchema } from '@/lib/schema';
 import type { Goal } from '@/components/GoalGrid';
 
 export const metadata: Metadata = {
@@ -224,6 +227,30 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="section">
+        <div className="wrap" style={{ maxWidth: 880 }}>
+          <div className="sect-head">
+            <div className="sect-head__text">
+              <span className="eyebrow">Frequently asked</span>
+              <h2 className="h1">Peptides in the UK — quick answers.</h2>
+              <p className="sect-head__sub">
+                Every claim links back to a primary source on the relevant peptide profile or guide.
+              </p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {HOMEPAGE_FAQ.map((q) => (
+              <details key={q.question} className="refs" style={{ background: 'var(--off-white)' }}>
+                <summary>{q.question}</summary>
+                <p style={{ marginTop: 16, fontSize: 15, lineHeight: 1.65, color: 'var(--charcoal)' }}>
+                  {q.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section section--off">
         <div className="wrap">
           <div className="trust-grid">
@@ -300,6 +327,12 @@ export default function HomePage() {
       </section>
 
       <SiteFooter />
+      <JsonLd
+        data={jsonLdGraph(
+          faqSchema(HOMEPAGE_FAQ),
+          breadcrumbSchema([{ name: 'Handbook', url: '/' }]),
+        )}
+      />
     </>
   );
 }

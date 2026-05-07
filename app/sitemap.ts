@@ -21,6 +21,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/medical-disclaimer`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${BASE}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
     { url: `${BASE}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${BASE}/llms.txt`, lastModified: now, changeFrequency: 'weekly', priority: 0.3 },
+    { url: `${BASE}/llms-full.txt`, lastModified: now, changeFrequency: 'weekly', priority: 0.3 },
   ];
 
   const peptideUrls: MetadataRoute.Sitemap = PEPTIDES.map((p) => ({
